@@ -27,11 +27,14 @@ namespace OxidEsales\EshopCommunity\Core\Autoload;
  *
  * The aliases are provided by a class map provider. But it is not sufficient
  * to
+ *
+ * @deprecated since v6.0.0-rc.2 (2017-06-01); Virtual namespaces were replaced by concrete classes, called
+ *                                             unified namespace classes
  */
 class AliasAutoload
 {
     /**
-     * Array map with virtual namespace class name as key, bc class name as value.
+     * Array map with Unified Namespace class name as key, bc class name as value.
      * @var array
      */
     private $backwardsCompatibilityClassMap = null;
@@ -51,21 +54,21 @@ class AliasAutoload
     public function autoload($class)
     {
         $bcAlias = null;
-        $virtualAlias = null;
+        $unifiedAlias = null;
         $realClass = null;
 
         if ($this->isBcAliasRequest($class)) {
             $bcAlias = $class;
-            $virtualAlias = $this->getVirtualAliasForBcAlias($class);
+            $unifiedAlias = $this->getVirtualAliasForBcAlias($class);
         }
 
         if ($this->isVirtualClassRequest($class)) {
-            $virtualAlias = $class;
+            $unifiedAlias = $class;
             $bcAlias = $this->getBcAliasForVirtualAlias($class);
         }
 
-        if ($virtualAlias) {
-            $realClass = $this->getRealClassForVirtualAlias($virtualAlias);
+        if ($unifiedAlias) {
+            $realClass = $this->getRealClassForVirtualAlias($unifiedAlias);
         }
 
         /** Pass over to the next registered autoloader, if no realClass has been found for the requested className  */
@@ -81,8 +84,8 @@ class AliasAutoload
         if ($bcAlias && !in_array(strtolower($bcAlias), $declaredClasses)) {
             class_alias($realClass, $bcAlias);
         }
-        if ($virtualAlias && !in_array(strtolower($virtualAlias), $declaredClasses)) {
-            class_alias($realClass, $virtualAlias);
+        if ($unifiedAlias && !in_array(strtolower($unifiedAlias), $declaredClasses)) {
+            class_alias($realClass, $unifiedAlias);
 
             /** At this point both a bcAlias and a virtualAlias would have be created successfully */
             return true;

@@ -135,16 +135,13 @@ if ($bootstrapConfigFileReader->isDebugMode()) {
 require_once VENDOR_PATH . 'autoload.php';
 
 /*
- * Require and register the alias autoloader.
- * This autoloader will load classes in the virtual namespace like '\OxidEsales\Eshop\Core\UtilsObject' or
- * for reasons of backwards compatibility classes like 'oxArticle'.
- *
- * Past this point you should use only create instances of classes from the virtual namespace
+ * Register the backwards compatibility autoloader.
+ * This autoloader will load classes for reasons of backwards compatibility like 'oxArticle'.
  */
-require_once CORE_AUTOLOADER_PATH . 'AliasAutoload.php';
+require_once CORE_AUTOLOADER_PATH . 'BackwardsCompatibilityAutoload.php';
 
 /**
- * Register the module autoload.
+ * Register the module autoloader.
  * It will load classes classes defined in the metadata key 'files'
  * When this autoloader is called a database connection will be triggered
  */
