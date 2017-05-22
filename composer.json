@@ -43,15 +43,10 @@
     "prefer-stable": true,
     "scripts": {
         "post-install-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@oe:ide-helper:generate"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ],
         "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@oe:ide-helper:generate"
-        ],
-        "oe:ide-helper:generate": [
-            "if [ -f ./vendor/bin/oe-eshop-ide_helper ]; then oe-eshop-ide_helper; fi"
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ],
         "oe:migration:run": "oe-eshop-doctrine_migration migrations:migrate",
         "oe:migration:new": "oe-eshop-doctrine_migration migrations:generate",
