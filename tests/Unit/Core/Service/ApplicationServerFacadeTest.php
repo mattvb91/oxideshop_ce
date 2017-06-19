@@ -25,13 +25,15 @@ use \OxidEsales\Eshop\Core\Registry;
 use \OxidEsales\Eshop\Core\DatabaseProvider;
 
 /**
- * @covers \OxidEsales\Eshop\Core\Service\ApplicationServerService
+ * @covers \OxidEsales\Eshop\Core\Service\ApplicationServerFacade
  */
 class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     public function testApplicationServerListStructure()
     {
-        $facade = oxNew(\OxidEsales\EshopCommunity\Core\Service\ApplicationServerFacade::class);
+        $config = Registry::getConfig();
+        $service = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $config);
+        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $service);
         $appServers = $facade->getApplicationServerList();
 
         $this->assertTrue(is_array($appServers));
@@ -56,8 +58,7 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
     {
 
         $service = $this->getApplicationServerServiceMock($activeServers);
-
-        $facade = $this->getApplicationServerFacadeMock($service);
+        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $service);
 
         $appServers = $facade->getApplicationServerList();
 
@@ -114,19 +115,5 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
         $service->expects($this->any())->method('loadActiveAppServerList')->will($this->returnValue($appServerList));
 
         return $service;
-    }
-
-    /**
-     * @param \OxidEsales\Eshop\Core\Service\ApplicationServerService $service Application Server Service object.
-     *
-     * @return \OxidEsales\EshopCommunity\Core\Service\ApplicationServerFacade
-     */
-    private function getApplicationServerFacadeMock($service)
-    {
-        $facade = $this->getMock(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class,
-            array("getApplicationServerService"));
-        $facade->expects($this->any())->method('getApplicationServerService')->will($this->returnValue($service));
-
-        return $facade;
     }
 }

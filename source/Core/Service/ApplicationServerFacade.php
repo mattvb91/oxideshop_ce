@@ -37,11 +37,12 @@ class ApplicationServerFacade
 
     /**
      * ApplicationServerFacade constructor.
+     *
+     * @param \OxidEsales\Eshop\Core\Service\ApplicationServerService $appServerService The service class of application server.
      */
-    public function __construct()
+    public function __construct($appServerService)
     {
-        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $this->appServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $config);
+        $this->appServerService = $appServerService;
     }
 
     /**
@@ -53,7 +54,7 @@ class ApplicationServerFacade
     {
         $activeServerCollection = [];
 
-        $activeServers = (array) $this->getApplicationServerService()->loadActiveAppServerList();
+        $activeServers = $this->getActiveApplicationServerList();
         foreach ($activeServers as $server) {
             if ($this->validateServerListItem($server)) {
                 $activeServerCollection[] = array(
@@ -71,11 +72,11 @@ class ApplicationServerFacade
     /**
      * Return application server service object.
      *
-     * @return \OxidEsales\Eshop\Core\Service\ApplicationServerService
+     * @return array
      */
-    protected function getApplicationServerService()
+    protected function getActiveApplicationServerList()
     {
-        return $this->appServerService;
+        return (array) $this->appServerService->loadActiveAppServerList();
     }
 
     /**

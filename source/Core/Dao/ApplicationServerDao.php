@@ -62,7 +62,7 @@ class ApplicationServerDao implements \OxidEsales\Eshop\Core\Contract\BaseDaoInt
     /**
      * Finds all application servers.
      *
-     * @return \OxidEsales\Eshop\Core\ApplicationServer[]
+     * @return array()
      */
     public function findAll()
     {

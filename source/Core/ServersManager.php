@@ -50,12 +50,19 @@ class ServersManager
     private $appServerService;
 
     /**
+     * @var \OxidEsales\Eshop\Core\Service\ApplicationServerFacade
+     */
+    private $appServerFacade;
+
+    /**
      * ServersManager constructor.
      */
     public function __construct()
     {
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
-        $this->appServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $config);
+        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
+        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+        $this->appServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao);
     }
 
     /**
@@ -91,20 +98,18 @@ class ServersManager
         $appServerList = $this->markInActiveServers($appServerList);
         $appServerList = $this->deleteInActiveServers($appServerList);
 
-        $aValidServers = array();
-        /** @var ApplicationServer $oServer */
-        foreach ($appServerList as $oServer) {
-            if ($oServer->isValid()) {
-                $aValidServers[] = array(
-                    'id'                => $oServer->getId(),
-                    'ip'                => $oServer->getIp(),
-                    'lastFrontendUsage' => $oServer->getLastFrontendUsage(),
-                    'lastAdminUsage'    => $oServer->getLastAdminUsage()
-                );
+        $activeServerList = array();
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
+        foreach ($appServerList as $server) {
+            if ($server->isValid()) {
+                $activeServerList[] = $server;
             }
         }
 
-        return $aValidServers;
+        $this->appServerService->setActiveAppServerList($activeServerList);
+
+        $appServerFacade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $this->appServerService);
+        return $appServerFacade->getApplicationServerList();
     }
 
     /**
@@ -120,13 +125,13 @@ class ServersManager
     /**
      * Mark servers as inactive if they are not used anymore.
      *
-     * @param ApplicationServerList $appServerList Information of all servers data
+     * @param array $appServerList Information of all servers data
      *
-     * @return ApplicationServerList $appServerList Information of all servers data
+     * @return array $appServerList Information of all servers data
      */
     public function markInActiveServers($appServerList)
     {
-        /** @var ApplicationServer $oServer */
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $oServer */
         foreach ($appServerList as $oServer) {
             if ($this->needToCheckApplicationServerAvailability($oServer->getTimestamp())) {
                 $oServer->setIsValid(false);
@@ -152,9 +157,9 @@ class ServersManager
     /**
      * Removes information about old and not used servers.
      *
-     * @param ApplicationServerList $appServerList Information of all servers data
+     * @param array $appServerList Information of all servers data
      *
-     * @return ApplicationServerList $appServerList Information of all servers data
+     * @return array $appServerList Information of all servers data
      */
     public function deleteInActiveServers($appServerList)
     {

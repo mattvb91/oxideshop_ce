@@ -35,16 +35,16 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     private $appServerDao;
 
+    private $activeList;
+
     /**
      * ApplicationServerService constructor.
      *
-     * @param \OxidEsales\Eshop\Core\Config $config Main shop configuration class.
+     * @param \OxidEsales\Eshop\Core\Dao\ApplicationServerDao $appServerDao The Dao object of application server.
      */
-    public function __construct($config)
+    public function __construct($appServerDao)
     {
-        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
-
-        $this->appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+        $this->appServerDao = $appServerDao;
     }
 
     /**
@@ -54,7 +54,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     public function loadAppServerList()
     {
-        return $this->getAppServerDao()->findAll();
+        return $this->appServerDao->findAll();
     }
 
     /**
@@ -66,17 +66,19 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     public function loadAppServer($id)
     {
-        return $this->getAppServerDao()->findById($id);
+        return $this->appServerDao->findById($id);
     }
 
     /**
      * Removes server node information.
      *
      * @param string $serverId
+     *
+     * @return bool
      */
     public function deleteAppServerById($serverId)
     {
-        return $this->getAppServerDao()->delete($serverId);
+        return $this->appServerDao->delete($serverId);
     }
 
     /**
@@ -88,10 +90,10 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     public function saveAppServer($appServer)
     {
-        if ($this->getAppServerDao()->findById($appServer->getId()) !== false) {
-            $effectedRows = $this->getAppServerDao()->update($appServer);
+        if ($this->appServerDao->findById($appServer->getId()) !== false) {
+            $effectedRows = $this->appServerDao->update($appServer);
         } else {
-            $effectedRows = $this->getAppServerDao()->insert($appServer);
+            $effectedRows = $this->appServerDao->insert($appServer);
         }
         return $effectedRows;
     }
@@ -103,24 +105,24 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     public function loadActiveAppServerList()
     {
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
-        $server->setId('serverNameHash1');
-        $server->setTimestamp('createdTimestamp');
-        $server->setIp('127.0.0.1');
-        $server->setLastFrontendUsage('frontendUsageTimestamp');
-        $server->setLastAdminUsage('adminUsageTimestamp');
-        $server->setIsValid();
+        if (isset($this->activeList)) {
+            return $this->activeList;
+        }
 
-        return array($server);
+        $activeServerList = array();
+
+        $allFoundServers = $this->loadAppServerList();
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
+        foreach ($allFoundServers as $server) {
+            if ($server->isValid()) {
+                $activeServerList[] = $server;
+            }
+        }
+        return $activeServerList;
     }
 
-    /**
-     * Returns ApplicationServerDao class.
-     *
-     * @return \OxidEsales\Eshop\Core\Dao\ApplicationServerDao
-     */
-    public function getAppServerDao()
+    public function setActiveAppServerList($actList)
     {
-        return $this->appServerDao;
+        $this->activeList = $actList;
     }
 }
