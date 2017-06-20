@@ -18,11 +18,11 @@
         "oxid-esales/eshop-edition-facts": "^v1.0.0",
         "doctrine/dbal": "v2.5.12",
         "oxid-esales/oxideshop-demodata-installer": "^v1.1.0",
-        "oxid-esales/oxideshop-composer-plugin": "*"
+        "oxid-esales/oxideshop-composer-plugin": "^v2.0.0"
     },
     "require-dev": {
         "oxid-esales/testing-library": "dev-master",
-        "oxid-esales/coding-standards": "*",
+        "oxid-esales/coding-standards": "^v3.0.2",
         "oxid-esales/coding-standards-wrapper": "dev-master",
         "incenteev/composer-parameter-handler": "~v2.0",
         "oxid-esales/oxideshop-ide-helper": "^2.0",
