@@ -43,55 +43,22 @@ class UtilsViewTest extends \OxidTestCase
             $this->markTestSkipped('This test is for Community edition only.');
         }
 
-        $myConfig = $this->getConfig();
-        $aDirs = array();
-        $aDirs[] = $myConfig->getTemplateDir(false);
-        $sDir = $myConfig->getOutDir(true) . $myConfig->getConfigParam('sTheme') . "/tpl/";
-        if (!in_array($sDir, $aDirs)) {
-            $aDirs[] = $sDir;
-        }
+        $expectedTemplateDirs = $this->getTemplateDirsAzure();
+        $utilsView = $this->getUtilsViewMock();
 
-        $sDir = $myConfig->getOutDir(true) . "azure/tpl/";
-        if (!in_array($sDir, $aDirs)) {
-            $aDirs[] = $sDir;
-        }
-
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $oUtilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
-
-        $templateDirs = $oUtilsView->getTemplateDirs();
-        $intersectDirs = array_intersect($aDirs, $templateDirs);
-
-        $this->assertCount(count($aDirs), $intersectDirs);
+        $this->assertArraySubset($expectedTemplateDirs, $utilsView->getTemplateDirs());
     }
 
-    /**
-     * oxUtilsView::getTemplateDirs() test case
-     *
-     * @return null
-     */
     public function testGetTemplateDirsOnlyAzure()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
             $this->markTestSkipped('This test is for Community edition only.');
         }
 
-        $myConfig = $this->getConfig();
-        $aDirs = array();
-        $aDirs[] = $myConfig->getTemplateDir(false);
-        $sDir = $myConfig->getOutDir(true) . $myConfig->getConfigParam('sTheme') . "/tpl/";
-        if (!in_array($sDir, $aDirs)) {
-            $aDirs[] = $sDir;
-        }
+        $expectedTemplateDirs = $this->getTemplateDirsAzure();
+        $utilsView = $this->getUtilsViewMock();
 
-        $sDir = $myConfig->getOutDir(true) . "azure/tpl/";
-        if (!in_array($sDir, $aDirs)) {
-            $aDirs[] = $sDir;
-        }
-
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $oUtilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
-        $this->assertEquals($aDirs, $oUtilsView->getTemplateDirs());
+        $this->assertEquals($expectedTemplateDirs, $utilsView->getTemplateDirs());
     }
 
     public function testGetEditionTemplateDirsContainsAzure()
@@ -108,13 +75,9 @@ class UtilsViewTest extends \OxidTestCase
             $shopPath . 'out/azure/tpl/',
         );
 
-        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $utilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
+        $utilsView = $this->getUtilsViewMock();
 
-        $templateDirs = $utilsView->getTemplateDirs();
-        $intersectDirs = array_intersect($dirs, $templateDirs);
-
-        $this->assertCount(count($dirs), $intersectDirs);
+        $this->assertArraySubset($dirs, $utilsView->getTemplateDirs());
     }
 
     public function testGetEditionTemplateDirsOnlyAzure()
@@ -131,8 +94,8 @@ class UtilsViewTest extends \OxidTestCase
             $shopPath . 'out/azure/tpl/',
         );
 
-        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $utilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
+        $utilsView = $this->getUtilsViewMock();
+
         $this->assertEquals($dirs, $utilsView->getTemplateDirs());
     }
 
@@ -152,10 +115,7 @@ class UtilsViewTest extends \OxidTestCase
         $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
         $utilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(true));
 
-        $templateDirs = $utilsView->getTemplateDirs();
-        $intersectDirs = array_intersect($dirs, $templateDirs);
-
-        $this->assertCount(count($dirs), $intersectDirs);
+        $this->assertArraySubset($dirs, $utilsView->getTemplateDirs());
     }
 
     public function testGetEditionTemplateDirsForAdminOnlyAzure()
@@ -173,6 +133,7 @@ class UtilsViewTest extends \OxidTestCase
 
         $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
         $utilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(true));
+
         $this->assertEquals($dirs, $utilsView->getTemplateDirs());
     }
 
@@ -196,24 +157,14 @@ class UtilsViewTest extends \OxidTestCase
             $aDirs[] = $sDir;
         }
 
-        //
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $oUtilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
-        $oUtilsView->setTemplateDir("testDir1");
-        $oUtilsView->setTemplateDir("testDir2");
-        $oUtilsView->setTemplateDir("testDir1");
+        $utilsView = $this->getUtilsViewMock();
+        $utilsView->setTemplateDir("testDir1");
+        $utilsView->setTemplateDir("testDir2");
+        $utilsView->setTemplateDir("testDir1");
 
-        $templateDirs = $oUtilsView->getTemplateDirs();
-        $intersectDirs = array_intersect($aDirs, $templateDirs);
-
-        $this->assertCount(count($aDirs), $intersectDirs);
+        $this->assertArraySubset($aDirs, $utilsView->getTemplateDirs());
     }
 
-    /**
-     * oxUtilsView::setTemplateDir() test case
-     *
-     * @return null
-     */
     public function testSetTemplateDirOnlyAzure()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
@@ -234,14 +185,12 @@ class UtilsViewTest extends \OxidTestCase
             $aDirs[] = $sDir;
         }
 
-        //
-        $oUtilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
-        $oUtilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
-        $oUtilsView->setTemplateDir("testDir1");
-        $oUtilsView->setTemplateDir("testDir2");
-        $oUtilsView->setTemplateDir("testDir1");
+        $utilsView = $this->getUtilsViewMock();
+        $utilsView->setTemplateDir("testDir1");
+        $utilsView->setTemplateDir("testDir2");
+        $utilsView->setTemplateDir("testDir1");
 
-        $this->assertEquals($aDirs, $oUtilsView->getTemplateDirs());
+        $this->assertEquals($aDirs, $utilsView->getTemplateDirs());
     }
 
     /**
@@ -339,7 +288,6 @@ class UtilsViewTest extends \OxidTestCase
 
     public function testAddErrorToDisplayUsingExeptionObject()
     {
-        $aTest = array();
         $oTest = oxNew('oxException');
         $oTest->setMessage("testMessage");
 
@@ -408,7 +356,7 @@ class UtilsViewTest extends \OxidTestCase
         $this->assertEquals(array('!' => '?'), $oUtilsView->parseThroughSmarty(array('!' => array('%', '[{$shop->urlSeparator}]')), time(), $oActView));
     }
 
-    public function testFillCommonSmartyPropertiesANDSmartyCompileCheckDemoShopContains()
+    public function testFillCommonSmartyPropertiesAndSmartyCompileCheckDemoShopContains()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
             $this->markTestSkipped('This test is for Community edition only.');
@@ -509,15 +457,14 @@ class UtilsViewTest extends \OxidTestCase
             $this->assertEquals($sVarValue, $oSmarty->$sVarName, $sVarName);
         }
 
-        $intersectDirs = array_intersect($aTemplatesDir, $oSmarty->template_dir);
-        $this->assertCount(count($aTemplatesDir), $intersectDirs);
+        $this->assertArraySubset($aTemplatesDir, $oSmarty->template_dir);
     }
 
     /**
      * Testing smarty config data setter
      */
     // demo mode
-    public function testFillCommonSmartyPropertiesANDSmartyCompileCheckDemoShopExactMatch()
+    public function testFillCommonSmartyPropertiesAndSmartyCompileCheckDemoShopExactMatch()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
             $this->markTestSkipped('This test is for Community edition only.');
@@ -619,7 +566,7 @@ class UtilsViewTest extends \OxidTestCase
         }
     }
 
-    public function testFillCommonSmartyPropertiesANDSmartyCompileCheckContains()
+    public function testFillCommonSmartyPropertiesAndSmartyCompileCheckContains()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
             $this->markTestSkipped('This test is for Community edition only.');
@@ -675,12 +622,11 @@ class UtilsViewTest extends \OxidTestCase
             $this->assertEquals($sVarValue, $oSmarty->$sVarName, $sVarName);
         }
 
-        $intersectDirs = array_intersect($aTemplatesDir, $oSmarty->template_dir);
-        $this->assertCount(count($aTemplatesDir), $intersectDirs);
+        $this->assertArraySubset($aTemplatesDir, $oSmarty->template_dir);
     }
 
     // non demo mode
-    public function testFillCommonSmartyPropertiesANDSmartyCompileCheckExactMatch()
+    public function testFillCommonSmartyPropertiesAndSmartyCompileCheckExactMatch()
     {
         if ($this->getTestConfig()->getShopEdition() != 'CE') {
             $this->markTestSkipped('This test is for Community edition only.');
@@ -787,4 +733,33 @@ class UtilsViewTest extends \OxidTestCase
 
     }
 
+    /**
+     * @return array
+     */
+    private function getTemplateDirsAzure()
+    {
+        $config = $this->getConfig();
+        $aDirs = [];
+        $aDirs[] = $config->getTemplateDir(false);
+        $sDir = $config->getOutDir(true) . $config->getConfigParam('sTheme') . "/tpl/";
+        if (!in_array($sDir, $aDirs)) {
+            $aDirs[] = $sDir;
+        }
+
+        $sDir = $config->getOutDir(true) . "azure/tpl/";
+        if (!in_array($sDir, $aDirs)) {
+            $aDirs[] = $sDir;
+        }
+        return $aDirs;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getUtilsViewMock()
+    {
+        $utilsView = $this->getMock(\OxidEsales\Eshop\Core\UtilsView::class, array("isAdmin"));
+        $utilsView->expects($this->any())->method('isAdmin')->will($this->returnValue(false));
+        return $utilsView;
+    }
 }
