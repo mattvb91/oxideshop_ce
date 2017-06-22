@@ -283,8 +283,6 @@ class SessionTest extends \OxidTestCase
      */
     public function testStartWhenDebugisOnAndErrorMessageExpected()
     {
-        if ($this->getSession()->isSessionStarted())
-            $this->getSession()->destroy();
         $this->getConfig()->setConfigParam('iDebug', 1);
         $this->setRequestParameter("sid", "testSid");
 
