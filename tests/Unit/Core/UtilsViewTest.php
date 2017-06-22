@@ -197,7 +197,6 @@ class UtilsViewTest extends \OxidTestCase
 
     public function testAddErrorToDisplayCustomDestinationFromPost()
     {
-        $myConfig = $this->getConfig();
         $this->setRequestParameter('CustomError', 'myDest');
         $this->setRequestParameter('actcontrol', 'oxwminibasket');
 
@@ -217,6 +216,7 @@ class UtilsViewTest extends \OxidTestCase
 
     public function testAddErrorToDisplayDefaultDestination()
     {
+        unset($_SESSION);
         $this->setRequestParameter('actcontrol', 'start');
         $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getId'));
         $oSession->expects($this->once())->method('getId')->will($this->returnValue(true));
@@ -234,7 +234,7 @@ class UtilsViewTest extends \OxidTestCase
 
     public function testAddErrorToDisplayUsingExeptionObject()
     {
-        $aTest = array();
+        unset($_SESSION);
         $oTest = oxNew('oxException');
         $oTest->setMessage("testMessage");
 
@@ -253,6 +253,7 @@ class UtilsViewTest extends \OxidTestCase
 
     public function testAddErrorToDisplayIfNotSet()
     {
+        unset($_SESSION);
         $oSession = $this->getMock(\OxidEsales\Eshop\Core\Session::class, array('getId'));
         $oSession->expects($this->once())->method('getId')->will($this->returnValue(true));
 
