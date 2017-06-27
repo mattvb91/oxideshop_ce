@@ -426,7 +426,6 @@ class VirtualNameSpaceClassMap
             'OxidEsales\Eshop\Application\Model\Wrapping' => \OxidEsales\EshopCommunity\Application\Model\Wrapping::class,
             'OxidEsales\Eshop\Core\AdminLogSqlDecorator' => \OxidEsales\EshopCommunity\Core\AdminLogSqlDecorator::class,
             'OxidEsales\Eshop\Core\ApplicationServer' => \OxidEsales\EshopCommunity\Core\ApplicationServer::class,
-            'OxidEsales\Eshop\Core\ApplicationServerList' => \OxidEsales\EshopCommunity\Core\ApplicationServerList::class,
             'OxidEsales\Eshop\Core\Dao\ApplicationServerDao' => \OxidEsales\EshopCommunity\Core\Dao\ApplicationServerDao::class,
             'OxidEsales\Eshop\Core\Contract\BaseDaoInterface' => \OxidEsales\EshopCommunity\Core\Contract\BaseDaoInterface::class,
             'OxidEsales\Eshop\Core\Service\ApplicationServerFacade' => \OxidEsales\EshopCommunity\Core\Service\ApplicationServerFacade::class,
