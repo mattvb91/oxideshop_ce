@@ -24,7 +24,6 @@ namespace OxidEsales\EshopCommunity\Core;
 
 use Exception;
 use oxConnectionException;
-use oxDb;
 use oxException;
 use OxidEsales\Eshop\Application\Controller\OxidStartController;
 use OxidEsales\Eshop\Application\Model\Shop;
@@ -761,6 +760,10 @@ class Config extends \OxidEsales\Eshop\Core\Base
      * Checks if passed parameter has special chars and replaces them.
      * Returns checked value.
      *
+     * @deprecated since v5.3.5 (2017-07-04).
+     *             Use method replaceSpecialChars instead.
+     *             See https://bugs.oxid-esales.com/view.php?id=6477
+     *
      * @param mixed $value value to process escaping
      * @param array $raw   keys of unescaped values
      *
@@ -769,6 +772,20 @@ class Config extends \OxidEsales\Eshop\Core\Base
     public function checkParamSpecialChars(&$value, $raw = null)
     {
         return Registry::get(\OxidEsales\Eshop\Core\Request::class)->checkParamSpecialChars($value, $raw);
+    }
+
+    /**
+     * Checks if passed parameter has special chars and replaces them.
+     * Returns checked value.
+     *
+     * @param mixed $value value to process escaping
+     * @param array $raw   keys of unescaped values
+     *
+     * @return mixed
+     */
+    public function replaceSpecialChars($dataWithSpecialChars, $raw = null)
+    {
+        return Registry::get(\OxidEsales\Eshop\Core\Request::class)->replaceSpecialChars($dataWithSpecialChars, $raw);
     }
 
     /**
