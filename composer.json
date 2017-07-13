@@ -13,16 +13,16 @@
         "phpmailer/phpmailer": "^v5.2.22",
         "smarty/smarty": "^v2.6.30",
         "oxid-esales/flow-theme": "dev-master || ^2.2.0",
-        "oxid-esales/oxideshop-doctrine-migration-wrapper": "dev-create_script_to_generate_unified_classes_ESDEV-4554",
+        "oxid-esales/oxideshop-doctrine-migration-wrapper": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "oxid-esales/oxideshop-db-views-generator": "^v1.1.0",
-        "oxid-esales/oxideshop-facts": "dev-create_script_to_generate_unified_classes_ESDEV-4554",
+        "oxid-esales/oxideshop-facts": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "doctrine/dbal": "v2.5.12",
-        "oxid-esales/oxideshop-demodata-installer": "dev-create_script_to_generate_unified_classes_ESDEV-4554",
+        "oxid-esales/oxideshop-demodata-installer": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "oxid-esales/oxideshop-composer-plugin": "^v2.0.0",
-        "oxid-esales/oxideshop-unified-namespace-generator": "dev-create_unified_namespace_class_map-ESDEV-4583"
+        "oxid-esales/oxideshop-unified-namespace-generator": "dev-feature_unified_namespace_generator-ESDEV-4546"
     },
     "require-dev": {
-        "oxid-esales/testing-library": "dev-SPIKE_unified_namespaces-ESDEV-4500",
+        "oxid-esales/testing-library": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "oxid-esales/coding-standards": "^v3.0.2",
         "oxid-esales/coding-standards-wrapper": "dev-master",
         "incenteev/composer-parameter-handler": "~v2.0",
