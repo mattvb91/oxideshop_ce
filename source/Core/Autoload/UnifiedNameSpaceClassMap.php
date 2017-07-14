@@ -1439,6 +1439,11 @@ class UnifiedNameSpaceClassMap
                 'isAbstract'       => false,
                 'isInterface'      => false
             ],
+            'OxidEsales\Eshop\Application\Controller\TextEditorHandler'                  => [
+                'editionClassName' => \OxidEsales\EshopCommunity\Application\Controller\TextEditorHandler::class,
+                'isAbstract'       => false,
+                'isInterface'      => false
+            ],
             'OxidEsales\Eshop\Application\Controller\ThankYouController'                 => [
                 'editionClassName' => \OxidEsales\EshopCommunity\Application\Controller\ThankYouController::class,
                 'isAbstract'       => false,
