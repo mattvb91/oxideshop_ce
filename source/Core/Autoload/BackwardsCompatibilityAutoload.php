@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link          http://www.oxid-esales.com
+ * @link      http://www.oxid-esales.com
  * @copyright (C) OXID eSales AG 2003-2016
- * @version       OXID eShop CE
+ * @version   OXID eShop CE
  */
 
 namespace OxidEsales\EshopCommunity\Core\Autoload;
@@ -31,8 +31,10 @@ namespace OxidEsales\EshopCommunity\Core\Autoload;
  */
 class BackwardsCompatibilityAutoload
 {
+
     /**
      * Array map with Unified Namespace class name as key, bc class name as value.
+     *
      * @var array
      */
     private $backwardsCompatibilityClassMap = null;
@@ -42,11 +44,11 @@ class BackwardsCompatibilityAutoload
      *
      * @param string $class Name of the class to be loaded
      */
-    public function autoload($class)
+    public static function autoload($class)
     {
-        $unifiedNamespaceClassName = $this->getUnifiedNamespaceClassForBcAlias($class);
+        $unifiedNamespaceClassName = static::getUnifiedNamespaceClassForBcAlias($class);
         if (!empty($unifiedNamespaceClassName)) {
-            $this->forceBackwardsCompatiblityClassLoading($unifiedNamespaceClassName);
+            static::forceBackwardsCompatiblityClassLoading($unifiedNamespaceClassName);
         }
     }
 
@@ -57,11 +59,12 @@ class BackwardsCompatibilityAutoload
      *
      * @return string Name of the unified namespace class like OxidEsales\Eshop\Application\Model\Article
      */
-    private function getUnifiedNamespaceClassForBcAlias($bcAlias)
+    private static function getUnifiedNamespaceClassForBcAlias($bcAlias)
     {
-        $classMap = $this->getBackwardsCompatibilityClassMap();
+        $classMap = static::getBackwardsCompatibilityClassMap();
         $bcAlias = strtolower($bcAlias);
         $result = isset($classMap[$bcAlias]) ? $classMap[$bcAlias] : "";
+
         return $result;
     }
 
@@ -71,7 +74,7 @@ class BackwardsCompatibilityAutoload
      *
      * @param string $class Name of the class to load
      */
-    private function forceBackwardsCompatiblityClassLoading($class)
+    private static function forceBackwardsCompatiblityClassLoading($class)
     {
         class_exists($class);
     }
@@ -81,14 +84,10 @@ class BackwardsCompatibilityAutoload
      *
      * @return array Mapping of Unified Namespace to backwards compatible classes.
      */
-    private function getBackwardsCompatibilityClassMap()
+    private static function getBackwardsCompatibilityClassMap()
     {
-        if (is_null($this->backwardsCompatibilityClassMap)) {
-            $classMap = include __DIR__ . DIRECTORY_SEPARATOR . 'BackwardsCompatibilityClassMap.php';
-            $this->backwardsCompatibilityClassMap = $classMap;
-        }
+        $classMap = include __DIR__ . DIRECTORY_SEPARATOR . 'BackwardsCompatibilityClassMap.php';
 
-        return $this->backwardsCompatibilityClassMap;
+        return $classMap;
     }
 }
-spl_autoload_register([new BackwardsCompatibilityAutoload(), 'autoload']);
