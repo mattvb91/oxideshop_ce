@@ -419,7 +419,7 @@ class Registry
         if (('oxutilsobject' === strtolower($className)) || \OxidEsales\Eshop\Core\UtilsObject::class === $className) {
             $object = \OxidEsales\Eshop\Core\UtilsObject::getInstance();
         } else {
-            $object = oxNew($className);
+            $object = \oxNew($className);
         }
 
         return $object;

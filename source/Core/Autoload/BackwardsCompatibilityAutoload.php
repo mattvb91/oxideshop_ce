@@ -33,19 +33,22 @@ class BackwardsCompatibilityAutoload
 {
 
     /**
-     * Array map with Unified Namespace class name as key, bc class name as value.
-     *
-     * @var array
-     */
-    private $backwardsCompatibilityClassMap = null;
-
-    /**
      * Autoload method.
      *
      * @param string $class Name of the class to be loaded
+     *
+     * @return bool
      */
     public static function autoload($class)
     {
+        /**
+         * Classes from unified namespace canot be loaded by this auto loader.
+         * Do not try to load them in order to avoid strange errors in edge cases.
+         */
+        if (false !== strpos($class, 'OxidEsales\Eshop\\')) {
+            return false;
+        }
+
         $unifiedNamespaceClassName = static::getUnifiedNamespaceClassForBcAlias($class);
         if (!empty($unifiedNamespaceClassName)) {
             static::forceBackwardsCompatiblityClassLoading($unifiedNamespaceClassName);
