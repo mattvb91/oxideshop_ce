@@ -15,11 +15,11 @@
         "oxid-esales/flow-theme": "dev-master || ^2.2.0",
         "oxid-esales/oxideshop-doctrine-migration-wrapper": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "oxid-esales/oxideshop-db-views-generator": "^v1.1.0",
-        "oxid-esales/oxideshop-facts": "dev-feature_unified_namespace_generator-ESDEV-4546",
+        "oxid-esales/oxideshop-facts": "dev-debug_why_require_autoload_is_needed-ESDEV-4664",
         "doctrine/dbal": "v2.5.12",
         "oxid-esales/oxideshop-demodata-installer": "dev-feature_unified_namespace_generator-ESDEV-4546",
         "oxid-esales/oxideshop-composer-plugin": "^v2.0.0",
-        "oxid-esales/oxideshop-unified-namespace-generator": "dev-feature_unified_namespace_generator-ESDEV-4546"
+        "oxid-esales/oxideshop-unified-namespace-generator": "dev-debug_why_require_autoload_is_needed-ESDEV-4664"
     },
     "require-dev": {
         "oxid-esales/testing-library": "dev-feature_unified_namespace_generator-ESDEV-4546",
