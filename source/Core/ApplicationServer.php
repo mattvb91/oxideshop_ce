@@ -38,6 +38,16 @@ class ApplicationServer
     const NODE_AVAILABILITY_CHECK_PERIOD = 86400;
 
     /**
+     * Time in seconds, server node information life time.
+     */
+    const INACTIVE_NODE_STORAGE_PERIOD = 259200;
+
+    /**
+     * Time in seconds, server node information must be updated.
+     */
+    const NODE_UPDATE_TIME = 86400;
+
+    /**
      * @var string
      */
     private $_sId;
@@ -203,7 +213,58 @@ class ApplicationServer
      */
     public function isInUse($currentTimestamp)
     {
+        return !$this->hasLifetimeExpired($currentTimestamp, self::NODE_AVAILABILITY_CHECK_PERIOD);
+    }
+
+    /**
+     * Check if application server availability check period is over.
+     *
+     * @param int $currentTimestamp The current timestamp.
+     *
+     * @return bool
+     */
+    public function needToDelete($currentTimestamp)
+    {
+        return $this->hasLifetimeExpired($currentTimestamp, self::INACTIVE_NODE_STORAGE_PERIOD);
+    }
+
+    /**
+     * Check if application server information must be updated.
+     *
+     * @param int $currentTimestamp The current timestamp.
+     *
+     * @return bool
+     */
+    public function needToUpdate($currentTimestamp)
+    {
+        return ($this->hasLifetimeExpired($currentTimestamp, self::NODE_UPDATE_TIME)
+            || !$this->isServerTimeValid($currentTimestamp));
+    }
+
+    /**
+     * Method checks if server time was not rolled back.
+     *
+     * @param int $currentTimestamp The current timestamp.
+     *
+     * @return bool
+     */
+    private function isServerTimeValid($currentTimestamp)
+    {
         $timestamp = $this->getTimestamp();
-        return (bool) ($timestamp < $currentTimestamp - self::NODE_AVAILABILITY_CHECK_PERIOD);
+        return ($currentTimestamp - $timestamp) >= 0;
+    }
+
+    /**
+     * Compare if the application server lifetime has exceeded given period.
+     *
+     * @param int $currentTimestamp The current timestamp.
+     * @param int $periodTimestamp  The timestamp of period to check.
+     *
+     * @return bool
+     */
+    private function hasLifetimeExpired($currentTimestamp, $periodTimestamp)
+    {
+        $timestamp = $this->getTimestamp();
+        return (bool) ($currentTimestamp - $timestamp > $periodTimestamp);
     }
 }

@@ -58,11 +58,11 @@ class ServerProcessor extends \OxidEsales\Eshop\Core\Base
     /**
      * Gets server node manager.
      *
-     * @return \OxidEsales\Eshop\Core\ServersManager
+     * @return \OxidEsales\Eshop\Core\Service\ApplicationServerService
      */
-    protected function _getServerNodesManager()
+    protected function _getApplicationServerService()
     {
-        return $this->_oServerNodesManager;
+        return $this->_oApplicationServerService;
     }
 
     /**
@@ -88,18 +88,18 @@ class ServerProcessor extends \OxidEsales\Eshop\Core\Base
     /**
      * Sets dependencies.
      *
-     * @param \OxidEsales\Eshop\Core\ServersManager $oServerNodesManager
+     * @param \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService
      * @param \OxidEsales\Eshop\Core\ServerChecker  $oServerNodeChecker
      * @param \OxidEsales\Eshop\Core\UtilsServer    $oUtilsServer
      * @param \OxidEsales\Eshop\Core\UtilsDate      $oUtilsDate
      */
     public function __construct(
-        \OxidEsales\Eshop\Core\ServersManager $oServerNodesManager,
+        \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService,
         \OxidEsales\Eshop\Core\ServerChecker $oServerNodeChecker,
         \OxidEsales\Eshop\Core\UtilsServer $oUtilsServer,
         \OxidEsales\Eshop\Core\UtilsDate $oUtilsDate
     ) {
-        $this->_oServerNodesManager = $oServerNodesManager;
+        $this->_oApplicationServerService = $oApplicationServerService;
         $this->_oServerNodeChecker = $oServerNodeChecker;
         $this->_oUtilsServer = $oUtilsServer;
         $this->_oUtilsDate = $oUtilsDate;
@@ -110,14 +110,15 @@ class ServerProcessor extends \OxidEsales\Eshop\Core\Base
      */
     public function process()
     {
-        $oNodesManager = $this->_getServerNodesManager();
+        $oAppServerService = $this->_getApplicationServerService();
         $sServerNodeId = $this->_getUtilsServer()->getServerNodeId();
-        $oNode = $oNodesManager->getServer($sServerNodeId);
+        $oNode = $oAppServerService->loadAppServer($sServerNodeId);
+        $oUtilsDate = $this->_getUtilsDate();
 
         $oNodeChecker = $this->_getServerNodeChecker();
-        if (!$oNodeChecker->check($oNode)) {
+        if ($oNode->needToUpdate($oUtilsDate->getTime())) {
             $this->_updateNodeInformation($oNode);
-            $oNodesManager->saveServer($oNode);
+            $oAppServerService->saveAppServer($oNode);
         }
     }
 

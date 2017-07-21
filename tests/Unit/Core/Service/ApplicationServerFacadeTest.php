@@ -29,33 +29,12 @@ use \OxidEsales\Eshop\Core\DatabaseProvider;
  */
 class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    /*public function testApplicationServerListStructure()
-    {
-        $config = Registry::getConfig();
-        $databaseProvider = oxNew(DatabaseProvider::class);
-        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
-        $service = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao);
-        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $service);
-
-        $appServers = $facade->getApplicationServerList();
-
-        $this->assertTrue(is_array($appServers));
-
-        $appServer = $appServers[0];
-
-        $this->assertArrayHasKey('id', $appServer);
-        $this->assertArrayHasKey('ip', $appServer);
-        $this->assertArrayHasKey('lastFrontendUsage', $appServer);
-        $this->assertArrayHasKey('lastAdminUsage', $appServer);
-
-    }
-
     /**
      * @param array $activeServers            An array of application servers.
      * @param int   $count                    Expected count of application servers.
      * @param array $expectedServerCollection Expected output.
      *
-     * @dataProvider getApplicationServerListDataProvider
+     * @dataProvider dataProviderForGetApplicationServerList
      */
     public function testGetApplicationServerList($activeServers, $count, $expectedServerCollection)
     {
@@ -74,7 +53,7 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
     /**
      * Data provider for the test method testGetApplicationServerList.
      */
-    public function getApplicationServerListDataProvider()
+    public function dataProviderForGetApplicationServerList()
     {
         $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
         $server->setId('serverNameHash1');
@@ -94,14 +73,14 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
             'lastAdminUsage'    => 'adminUsageTimestamp'
         );
 
-        return array(
-            array(null, 0, null),
-            array(1, 0, null),
-            array(0, 0, null),
-            array([], 0, null),
-            array($activeServers, 1, $expectedServerCollection),
-            array($activeServers2, 2, $expectedServerCollection),
-        );
+        return [
+            [null, 0, null],
+            [1, 0, null],
+            [0, 0, null],
+            [[], 0, null],
+            [$activeServers, 1, $expectedServerCollection],
+            [$activeServers2, 2, $expectedServerCollection],
+        ];
     }
 
     /**
@@ -116,7 +95,7 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
         $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
         $service = $this->getMock(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
             array("loadActiveAppServerList"),
-            array($appServerDao));
+            array($appServerDao, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()));
         $service->expects($this->any())->method('loadActiveAppServerList')->will($this->returnValue($appServerList));
 
         return $service;

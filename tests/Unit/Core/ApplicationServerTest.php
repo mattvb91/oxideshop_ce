@@ -90,7 +90,7 @@ class ApplicationServerTest extends \OxidTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestMultiModuleInheritanceTestPhpInheritance
+     * @dataProvider dataProviderServerIsInUse
      *
      * @param int  $currentTime    The current timestamp.
      * @param int  $serverTime     The server timestamp.
@@ -104,16 +104,73 @@ class ApplicationServerTest extends \OxidTestCase
     }
 
     /**
-     * Data provider for the test method testGetApplicationServerList.
+     * Data provider for the test method .
      */
-    public function getServerIsInUseDataProvider()
+    public function dataProviderServerIsInUse()
+    {
+        $currentTime = 1400000000;
+        return array(
+            array(null, $currentTime - (25 * 3600), true),
+            array(1, $currentTime - (25 * 3600), true),
+            array($currentTime, $currentTime - (25 * 3600), false),
+            array($currentTime, $currentTime - (11 * 3600), true)
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderNeedToDeleteAppServer
+     *
+     * @param int  $currentTime    The current timestamp.
+     * @param int  $serverTime     The server timestamp.
+     * @param bool $expectedResult Expected result
+     */
+    public function testNeedToDeleteAppServer($currentTime, $serverTime, $expectedResult)
+    {
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode->setTimestamp($serverTime);
+        $this->assertSame($expectedResult, $serverNode->needToDelete($currentTime));
+    }
+
+    /**
+     * Data provider for the test method .
+     */
+    public function dataProviderNeedToDeleteAppServer()
+    {
+        $currentTime = 1400000000;
+        return array(
+            array(null, $currentTime - (73 * 3600), false),
+            array(1, $currentTime - (73 * 3600), false),
+            array($currentTime, $currentTime - (73 * 3600), true),
+            array($currentTime, $currentTime - (11 * 3600), false)
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderNeedToUpdateAppServer
+     *
+     * @param int  $currentTime    The current timestamp.
+     * @param int  $serverTime     The server timestamp.
+     * @param bool $expectedResult Expected result
+     */
+    public function testNeedToUpdateAppServer($currentTime, $serverTime, $expectedResult)
+    {
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode->setTimestamp($serverTime);
+        $this->assertSame($expectedResult, $serverNode->needToUpdate($currentTime));
+    }
+
+    /**
+     * Data provider for the test method .
+     */
+    public function dataProviderNeedToUpdateAppServer()
     {
         $currentTime = 1400000000;
         return array(
             array(null, $currentTime - (25 * 3600), true),
             array(1, $currentTime - (25 * 3600), true),
             array($currentTime, $currentTime - (25 * 3600), true),
-            array($currentTime, $currentTime - (11 * 3600), false)
+            array($currentTime, $currentTime - (11 * 3600), false),
+            array($currentTime, $currentTime + (11 * 3600), true)  //not valid server time
         );
     }
 

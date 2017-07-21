@@ -35,20 +35,27 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      */
     private $appServerDao;
 
-    private $activeList;
+    /**
+     * Current checking time - timestamp.
+     *
+     * @var int
+     */
+    private $currentTime = 0;
 
     /**
      * ApplicationServerService constructor.
      *
      * @param \OxidEsales\Eshop\Core\Dao\ApplicationServerDao $appServerDao The Dao object of application server.
+     * @param int                                             $currentTime  The current time - timestamp.
      */
-    public function __construct($appServerDao)
+    public function __construct($appServerDao, $currentTime)
     {
         $this->appServerDao = $appServerDao;
+        $this->currentTime = $currentTime;
     }
 
     /**
-     * Returns all servers information array from configuration.
+     * Returns an array of all application servers.
      *
      * @return array
      */
@@ -99,30 +106,47 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     }
 
     /**
-     * Returns all servers information array from configuration.
+     * Returns an array of all only active application servers.
      *
      * @return array
      */
     public function loadActiveAppServerList()
     {
-        if (isset($this->activeList)) {
-            return $this->activeList;
-        }
-
-        $activeServerList = array();
-
         $allFoundServers = $this->loadAppServerList();
+        return $this->filterActiveAppServers($allFoundServers);
+    }
+
+    /**
+     * Filter only active application servers from given list.
+     *
+     * @param array $appServerList The list of application servers.
+     *
+     * @return array
+     */
+    protected function filterActiveAppServers($appServerList)
+    {
+        $activeServerList = [];
         /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
-        foreach ($allFoundServers as $server) {
-            if ($server->isValid()) {
+        foreach ($appServerList as $server) {
+            if ($server->isInUse($this->currentTime)) {
                 $activeServerList[] = $server;
             }
         }
         return $activeServerList;
     }
 
-    public function setActiveAppServerList($actList)
+    /**
+     * Deletes all application servers, that are longer not active.
+     */
+    public function cleanupAppServers()
     {
-        $this->activeList = $actList;
+        $allFoundServers = $this->loadAppServerList();
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
+        foreach ($allFoundServers as $server) {
+            if ($server->needToDelete($this->currentTime)) {
+                $this->deleteAppServerById($server->getId());
+            }
+        }
     }
+
 }

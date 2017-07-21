@@ -290,8 +290,15 @@ class SystemEventHandler
      */
     protected function _getServerProcessor()
     {
-        /** @var \OxidEsales\Eshop\Core\ServersManager $oServerNodesManager */
-        $oServerNodesManager = oxNew(\OxidEsales\Eshop\Core\ServersManager::class);
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
+        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+
+        /** @var \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService */
+        $oApplicationServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
+            $appServerDao,
+            \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()
+        );
 
         /** @var \OxidEsales\Eshop\Core\ServerChecker $oServerNodeChecker */
         $oServerNodeChecker = oxNew(\OxidEsales\Eshop\Core\ServerChecker::class);
@@ -304,6 +311,6 @@ class SystemEventHandler
 
         /** @var \OxidEsales\Eshop\Core\ServerProcessor $oProcessor */
 
-        return oxNew('oxServerProcessor', $oServerNodesManager, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        return oxNew('oxServerProcessor', $oApplicationServerService, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
     }
 }

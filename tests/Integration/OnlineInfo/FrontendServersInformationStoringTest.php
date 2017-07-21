@@ -23,7 +23,6 @@ namespace OxidEsales\EshopCommunity\Tests\Integration\OnlineInfo;
 
 use oxServerChecker;
 use oxServerProcessor;
-use oxServersManager;
 use oxUtilsDate;
 use oxUtilsServer;
 
@@ -88,7 +87,17 @@ class FrontendServersInformationStoringTest extends \OxidTestCase
 
         $this->getConfig()->saveSystemConfigParameter('arr', 'aServersData_'.$sServerId, null);
 
-        $oServerProcessor = new oxServerProcessor(new oxServersManager(), new oxServerChecker(), $oUtilsServer, $oUtilsDate);
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
+        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+
+        /** @var \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService */
+        $oApplicationServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
+            $appServerDao,
+            \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()
+        );
+
+        $oServerProcessor = new oxServerProcessor($oApplicationServerService, new oxServerChecker(), $oUtilsServer, $oUtilsDate);
         $oServerProcessor->process();
         $aServersData = $this->getConfig()->getSystemConfigParameter('aServersData_'.$sServerId);
 

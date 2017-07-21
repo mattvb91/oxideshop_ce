@@ -52,6 +52,8 @@ class ApplicationServerFacade
      */
     public function getApplicationServerList()
     {
+        $this->appServerService->cleanupAppServers();
+
         $activeServerCollection = [];
 
         $activeServers = $this->getActiveApplicationServerList();

@@ -30,24 +30,21 @@ class ServerProcessorTest extends \OxidTestCase
 {
     public function testNodeInformationNotUpdatedIfNotNeed()
     {
-        $oNode = oxNew('oxApplicationServer');
-        $oNode->setTimestamp(time());
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $oNode */
+        $oNode = $this->getMock('\OxidEsales\Eshop\Core\ApplicationServer');
+        // Test that check is called with object got from server node manager.
+        $oNode->expects($this->any())->method('needToUpdate')->will($this->returnValue(false));
 
-        /** @var oxServersManager $oServerNodesManager */
-        $oServerNodesManager = $this->getMock('oxServersManager');
-        // Test that processor do not update node information if not needed.
-        $oServerNodesManager->expects($this->never())->method('saveServer');
-        $oServerNodesManager->expects($this->once())->method('getServer')->will($this->returnValue($oNode));
+        /** @var \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService */
+        $oApplicationServerService = $this->getApplicationServerServiceMock($oNode);
 
         /** @var oxServerChecker $oServerNodeChecker */
         $oServerNodeChecker = $this->getMock('oxServerChecker');
-        // Test that check is called with object got from server node manager.
-        $oServerNodeChecker->expects($this->any())->method('check')->with($oNode)->will($this->returnValue(true));
 
         $oUtilsServer = $this->getMock('oxUtilsServer');
         $oUtilsDate = $this->getMock('oxUtilsDate');
 
-        $oServerNodesProcessor = new oxServerProcessor($oServerNodesManager, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        $oServerNodesProcessor = new oxServerProcessor($oApplicationServerService, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
         $oServerNodesProcessor->process();
     }
 
@@ -88,17 +85,22 @@ class ServerProcessorTest extends \OxidTestCase
     {
         $this->setAdminMode($blAdmin);
 
-        $oNode = oxNew('oxApplicationServer');
-        $oNode->setTimestamp(time());
-        /** @var oxServersManager $oServerNodesManager */
-        $oServerNodesManager = $this->getMock('oxServersManager');
-        // Test that node manager was called with correct values.
-        $oServerNodesManager->expects($this->atLeastOnce())->method('saveServer')->with($this->equalTo($oExpectedNode));
-        $oServerNodesManager->expects($this->any())->method('getServer')->will($this->returnValue($oNode));
+        /** @var \OxidEsales\Eshop\Core\ApplicationServer $oNode */
+        $oNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
+        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+        $service = $this->getMock(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
+            array("loadAppServer", "saveAppServer"),
+            array($appServerDao, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()));
+        // Test that processor do not update node information if not needed.
+        $service->expects($this->any())->method('loadAppServer')->will($this->returnValue($oNode));
+        $service->expects($this->any())->method('saveAppServer')->with($this->equalTo($oExpectedNode));
+
 
         /** @var oxServerChecker $oServerNodeChecker */
         $oServerNodeChecker = $this->getMock('oxServerChecker');
-        $oServerNodeChecker->expects($this->once())->method('check')->with($oNode)->will($this->returnValue(false));
 
         $oUtilsServer = $this->getMock('oxUtilsServer');
         $oUtilsServer->expects($this->any())->method('getServerIp')->will($this->returnValue($sIP));
@@ -107,7 +109,28 @@ class ServerProcessorTest extends \OxidTestCase
         $oUtilsDate = $this->getMock('oxUtilsDate');
         $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue($sCurrentTime));
 
-        $oServerNodesProcessor = new oxServerProcessor($oServerNodesManager, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        $oServerNodesProcessor = new oxServerProcessor($service, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
         $oServerNodesProcessor->process();
     }
+
+    /**
+     * @param array $appServerList An array of application servers to return.
+     *
+     * @return \OxidEsales\Eshop\Core\Service\ApplicationServerService
+     */
+    private function getApplicationServerServiceMock($oNode)
+    {
+        $config = \OxidEsales\Eshop\Core\Registry::getConfig();
+        $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
+        $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+        $service = $this->getMock(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
+            array("loadAppServer", "saveAppServer"),
+            array($appServerDao, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()));
+        // Test that processor do not update node information if not needed.
+        $service->expects($this->any())->method('loadAppServer')->will($this->returnValue($oNode));
+        $service->expects($this->any())->method('saveAppServer');
+
+        return $service;
+    }
+
 }
