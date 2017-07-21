@@ -38,13 +38,10 @@ class ServerProcessorTest extends \OxidTestCase
         /** @var \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService */
         $oApplicationServerService = $this->getApplicationServerServiceMock($oNode);
 
-        /** @var oxServerChecker $oServerNodeChecker */
-        $oServerNodeChecker = $this->getMock('oxServerChecker');
-
         $oUtilsServer = $this->getMock('oxUtilsServer');
         $oUtilsDate = $this->getMock('oxUtilsDate');
 
-        $oServerNodesProcessor = new oxServerProcessor($oApplicationServerService, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        $oServerNodesProcessor = new oxServerProcessor($oApplicationServerService, $oUtilsServer, $oUtilsDate);
         $oServerNodesProcessor->process();
     }
 
@@ -98,10 +95,6 @@ class ServerProcessorTest extends \OxidTestCase
         $service->expects($this->any())->method('loadAppServer')->will($this->returnValue($oNode));
         $service->expects($this->any())->method('saveAppServer')->with($this->equalTo($oExpectedNode));
 
-
-        /** @var oxServerChecker $oServerNodeChecker */
-        $oServerNodeChecker = $this->getMock('oxServerChecker');
-
         $oUtilsServer = $this->getMock('oxUtilsServer');
         $oUtilsServer->expects($this->any())->method('getServerIp')->will($this->returnValue($sIP));
         $oUtilsServer->expects($this->any())->method('getServerNodeId')->will($this->returnValue($sServerId));
@@ -109,7 +102,7 @@ class ServerProcessorTest extends \OxidTestCase
         $oUtilsDate = $this->getMock('oxUtilsDate');
         $oUtilsDate->expects($this->any())->method('getTime')->will($this->returnValue($sCurrentTime));
 
-        $oServerNodesProcessor = new oxServerProcessor($service, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        $oServerNodesProcessor = new oxServerProcessor($service, $oUtilsServer, $oUtilsDate);
         $oServerNodesProcessor->process();
     }
 

@@ -569,7 +569,6 @@ class VirtualNameSpaceClassMap
             'OxidEsales\Eshop\Core\SepaBICValidator' => \OxidEsales\EshopCommunity\Core\SepaBICValidator::class,
             'OxidEsales\Eshop\Core\SepaIBANValidator' => \OxidEsales\EshopCommunity\Core\SepaIBANValidator::class,
             'OxidEsales\Eshop\Core\SepaValidator' => \OxidEsales\EshopCommunity\Core\SepaValidator::class,
-            'OxidEsales\Eshop\Core\ServerChecker' => \OxidEsales\EshopCommunity\Core\ServerChecker::class,
             'OxidEsales\Eshop\Core\ServerProcessor' => \OxidEsales\EshopCommunity\Core\ServerProcessor::class,
             'OxidEsales\Eshop\Core\ServersManager' => \OxidEsales\EshopCommunity\Core\ServersManager::class,
             'OxidEsales\Eshop\Core\Session' => \OxidEsales\EshopCommunity\Core\Session::class,

@@ -300,9 +300,6 @@ class SystemEventHandler
             \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()
         );
 
-        /** @var \OxidEsales\Eshop\Core\ServerChecker $oServerNodeChecker */
-        $oServerNodeChecker = oxNew(\OxidEsales\Eshop\Core\ServerChecker::class);
-
         /** @var \OxidEsales\Eshop\Core\UtilsServer $oUtilsServer */
         $oUtilsServer = oxNew(\OxidEsales\Eshop\Core\UtilsServer::class);
 
@@ -311,6 +308,6 @@ class SystemEventHandler
 
         /** @var \OxidEsales\Eshop\Core\ServerProcessor $oProcessor */
 
-        return oxNew('oxServerProcessor', $oApplicationServerService, $oServerNodeChecker, $oUtilsServer, $oUtilsDate);
+        return oxNew('oxServerProcessor', $oApplicationServerService, $oUtilsServer, $oUtilsDate);
     }
 }

@@ -31,7 +31,6 @@ use oxUtilsServer;
  *
  * @covers oxServerProcessor
  * @covers oxApplicationServer
- * @covers oxServerChecker
  * @covers oxServersManager
  */
 class FrontendServersInformationStoringTest extends \OxidTestCase
