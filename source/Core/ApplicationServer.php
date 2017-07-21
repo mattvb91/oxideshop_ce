@@ -33,19 +33,19 @@ namespace OxidEsales\EshopCommunity\Core;
 class ApplicationServer
 {
     /**
-     * Time in seconds, server node information life time.
+     * Time in seconds, active server information life time.
      */
-    const NODE_AVAILABILITY_CHECK_PERIOD = 86400;
+    const SERVER_INFORMATION_TIME_LIFE = 86400;
 
     /**
-     * Time in seconds, server node information life time.
+     * Time in seconds, how long inactive server information will be stored.
      */
-    const INACTIVE_NODE_STORAGE_PERIOD = 259200;
+    const INACTIVE_SERVER_STORAGE_PERIOD = 259200;
 
     /**
-     * Time in seconds, server node information must be updated.
+     * Time in seconds, how often server information must be updated.
      */
-    const NODE_UPDATE_TIME = 86400;
+    const SERVER_INFO_UPDATE_PERIOD = 86400;
 
     /**
      * @var string
@@ -213,7 +213,7 @@ class ApplicationServer
      */
     public function isInUse($currentTimestamp)
     {
-        return !$this->hasLifetimeExpired($currentTimestamp, self::NODE_AVAILABILITY_CHECK_PERIOD);
+        return !$this->hasLifetimeExpired($currentTimestamp, self::SERVER_INFORMATION_TIME_LIFE);
     }
 
     /**
@@ -225,7 +225,7 @@ class ApplicationServer
      */
     public function needToDelete($currentTimestamp)
     {
-        return $this->hasLifetimeExpired($currentTimestamp, self::INACTIVE_NODE_STORAGE_PERIOD);
+        return $this->hasLifetimeExpired($currentTimestamp, self::INACTIVE_SERVER_STORAGE_PERIOD);
     }
 
     /**
@@ -237,7 +237,7 @@ class ApplicationServer
      */
     public function needToUpdate($currentTimestamp)
     {
-        return ($this->hasLifetimeExpired($currentTimestamp, self::NODE_UPDATE_TIME)
+        return ($this->hasLifetimeExpired($currentTimestamp, self::SERVER_INFO_UPDATE_PERIOD)
             || !$this->isServerTimeValid($currentTimestamp));
     }
 
@@ -265,6 +265,6 @@ class ApplicationServer
     private function hasLifetimeExpired($currentTimestamp, $periodTimestamp)
     {
         $timestamp = $this->getTimestamp();
-        return (bool) ($currentTimestamp - $timestamp > $periodTimestamp);
+        return (bool) ($currentTimestamp - $timestamp >= $periodTimestamp);
     }
 }

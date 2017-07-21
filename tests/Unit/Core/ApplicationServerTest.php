@@ -110,10 +110,10 @@ class ApplicationServerTest extends \OxidTestCase
     {
         $currentTime = 1400000000;
         return array(
-            array(null, $currentTime - (25 * 3600), true),
-            array(1, $currentTime - (25 * 3600), true),
-            array($currentTime, $currentTime - (25 * 3600), false),
-            array($currentTime, $currentTime - (11 * 3600), true)
+            array(null, $currentTime - (25 * 3600), true),         // If server timestamp is not set at all.
+            array(1, $currentTime - (25 * 3600), true),            // If server timestamp is not valid.
+            array($currentTime, $currentTime - (25 * 3600), false),// If server TTL has exceeded.
+            array($currentTime, $currentTime - (11 * 3600), true)  // If server TTL didn't exceeded.
         );
     }
 
@@ -138,10 +138,10 @@ class ApplicationServerTest extends \OxidTestCase
     {
         $currentTime = 1400000000;
         return array(
-            array(null, $currentTime - (73 * 3600), false),
-            array(1, $currentTime - (73 * 3600), false),
-            array($currentTime, $currentTime - (73 * 3600), true),
-            array($currentTime, $currentTime - (11 * 3600), false)
+            array(null, $currentTime - (73 * 3600), false),       // Don't remove server if timestamp is not set at all.
+            array(1, $currentTime - (73 * 3600), false),          // Don't remove server if timestamp is not valid.
+            array($currentTime, $currentTime - (73 * 3600), true),// Remove server if its TTL has exceeded.
+            array($currentTime, $currentTime - (11 * 3600), false)// Don't remove server if its TTL didn't exceeded.
         );
     }
 
@@ -166,11 +166,12 @@ class ApplicationServerTest extends \OxidTestCase
     {
         $currentTime = 1400000000;
         return array(
-            array(null, $currentTime - (25 * 3600), true),
-            array(1, $currentTime - (25 * 3600), true),
-            array($currentTime, $currentTime - (25 * 3600), true),
-            array($currentTime, $currentTime - (11 * 3600), false),
-            array($currentTime, $currentTime + (11 * 3600), true)  //not valid server time
+            array(null, $currentTime - (25 * 3600), true),         // Update server if server time is not set at all.
+            array($currentTime, $currentTime - (25 * 3600), true), // Time when server information must be updated.
+            array($currentTime, $currentTime - (24 * 3600), true), // Exact time when server information must be updated.
+            array($currentTime, $currentTime - (11 * 3600), false),// Time when server information is up to date.
+            array($currentTime, $currentTime, false),              // When node time is the same as current time.
+            array($currentTime, $currentTime + (11 * 3600), true)  // Update server if server time is not valid.
         );
     }
 
