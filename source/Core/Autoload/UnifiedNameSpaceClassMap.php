@@ -1936,8 +1936,8 @@ return [
         'isAbstract'       => false,
         'isInterface'      => false
     ],
-    'OxidEsales\Eshop\Core\ApplicationServer'                                    => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\ApplicationServer::class,
+    'OxidEsales\Eshop\Core\DataObject\ApplicationServer'                                    => [
+        'editionClassName' => \OxidEsales\EshopCommunity\Core\DataObject\ApplicationServer::class,
         'isAbstract'       => false,
         'isInterface'      => false
     ],

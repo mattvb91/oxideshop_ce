@@ -81,7 +81,7 @@ class ApplicationServerServiceTest extends \OxidEsales\TestingLibrary\UnitTestCa
 
         $currentTime = \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime();
 
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('testId');
 
         $service = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao, $utilsServer, $currentTime);
@@ -104,7 +104,7 @@ class ApplicationServerServiceTest extends \OxidEsales\TestingLibrary\UnitTestCa
 
         $currentTime = \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime();
 
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('testId');
 
         $service = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao, $utilsServer, $currentTime);
@@ -115,7 +115,7 @@ class ApplicationServerServiceTest extends \OxidEsales\TestingLibrary\UnitTestCa
     public function testLoadActiveAppServerListIfServerIsValid()
     {
         $currentTime = \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime();
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('serverNameHash1');
         $server->setTimestamp($currentTime - (11 * 3600));
         $server->setIp('127.0.0.1');
@@ -133,7 +133,7 @@ class ApplicationServerServiceTest extends \OxidEsales\TestingLibrary\UnitTestCa
     public function testLoadActiveAppServerListIfServerIsNotValid()
     {
         $currentTime = \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime();
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('serverNameHash1');
         $server->setTimestamp($currentTime - (25 * 3600));
         $server->setIp('127.0.0.1');

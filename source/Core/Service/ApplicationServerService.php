@@ -76,7 +76,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      *
      * @param string $id The id of the application server to load.
      *
-     * @return \OxidEsales\Eshop\Core\ApplicationServer
+     * @return \OxidEsales\Eshop\Core\DataObject\ApplicationServer
      */
     public function loadAppServer($id)
     {
@@ -98,7 +98,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     /**
      * Saves application server data.
      *
-     * @param \OxidEsales\Eshop\Core\ApplicationServer $appServer
+     * @param \OxidEsales\Eshop\Core\DataObject\ApplicationServer $appServer
      *
      * @return int
      */
@@ -133,7 +133,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     protected function filterActiveAppServers($appServerList)
     {
         $activeServerList = [];
-        /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
+        /** @var \OxidEsales\Eshop\Core\DataObject\ApplicationServer $server */
         foreach ($appServerList as $server) {
             if ($server->isInUse($this->currentTime)) {
                 $activeServerList[] = $server;
@@ -148,7 +148,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     public function cleanupAppServers()
     {
         $allFoundServers = $this->loadAppServerList();
-        /** @var \OxidEsales\Eshop\Core\ApplicationServer $server */
+        /** @var \OxidEsales\Eshop\Core\DataObject\ApplicationServer $server */
         foreach ($allFoundServers as $server) {
             if ($server->needToDelete($this->currentTime)) {
                 $this->deleteAppServerById($server->getId());
@@ -174,7 +174,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     /**
      * Updates application server with the newest information.
      *
-     * @param \OxidEsales\Eshop\Core\ApplicationServer $appServer The application server to update.
+     * @param \OxidEsales\Eshop\Core\DataObject\ApplicationServer $appServer The application server to update.
      * @param bool                                     $adminMode The status of admin mode
      */
     private function updateAppServerData($appServer, $adminMode)

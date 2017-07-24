@@ -62,7 +62,7 @@ class ServersManager
      *
      * @param string $serverId
      *
-     * @return \OxidEsales\Eshop\Core\ApplicationServer
+     * @return \OxidEsales\Eshop\Core\DataObject\ApplicationServer
      */
     public function getServer($serverId)
     {
@@ -72,7 +72,7 @@ class ServersManager
     /**
      * Saves given server information to config.
      *
-     * @param \OxidEsales\Eshop\Core\ApplicationServer $oServer
+     * @param \OxidEsales\Eshop\Core\DataObject\ApplicationServer $oServer
      */
     public function saveServer($oServer)
     {

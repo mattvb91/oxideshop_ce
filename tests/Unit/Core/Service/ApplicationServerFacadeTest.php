@@ -55,7 +55,7 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
      */
     public function dataProviderForGetApplicationServerList()
     {
-        $server = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('serverNameHash1');
         $server->setTimestamp('createdTimestamp');
         $server->setIp('127.0.0.1');

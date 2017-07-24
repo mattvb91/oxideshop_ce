@@ -29,62 +29,62 @@ class ApplicationServerTest extends \OxidTestCase
 
     public function testSetGetId()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setId('ThisIsServerId');
         $this->assertSame('ThisIsServerId', $serverNode->getId());
     }
 
     public function testSetGetIp()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setIp('11.11.11.11');
         $this->assertSame('11.11.11.11', $serverNode->getIp());
     }
 
     public function testSetGetTimeStamp()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setTimestamp(123456789);
         $this->assertSame(123456789, $serverNode->getTimestamp());
     }
 
     public function testSetGetLastFrontendUsage()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setLastFrontendUsage(123456789);
         $this->assertSame(123456789, $serverNode->getLastFrontendUsage());
     }
 
     public function testSetGetLastAdminUsage()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setLastAdminUsage(123456789);
         $this->assertSame(123456789, $serverNode->getLastAdminUsage());
     }
 
     public function testServerValidityOnCreation()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $this->assertFalse($serverNode->isValid());
     }
 
     public function testServerValidityOnSetFalse()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setIsValid(false);
         $this->assertFalse($serverNode->isValid());
     }
 
     public function testServerValidityOnSetTrue()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setIsValid(true);
         $this->assertTrue($serverNode->isValid());
     }
 
     public function testServerValidityOnSetDefault()
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setIsValid();
         $this->assertTrue($serverNode->isValid());
     }
@@ -98,7 +98,7 @@ class ApplicationServerTest extends \OxidTestCase
      */
     public function testServerIsInUse($currentTime, $serverTime, $expectedResult)
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setTimestamp($serverTime);
         $this->assertSame($expectedResult, $serverNode->isInUse($currentTime));
     }
@@ -126,7 +126,7 @@ class ApplicationServerTest extends \OxidTestCase
      */
     public function testNeedToDeleteAppServer($currentTime, $serverTime, $expectedResult)
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setTimestamp($serverTime);
         $this->assertSame($expectedResult, $serverNode->needToDelete($currentTime));
     }
@@ -154,7 +154,7 @@ class ApplicationServerTest extends \OxidTestCase
      */
     public function testNeedToUpdateAppServer($currentTime, $serverTime, $expectedResult)
     {
-        $serverNode = oxNew(\OxidEsales\Eshop\Core\ApplicationServer::class);
+        $serverNode = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $serverNode->setTimestamp($serverTime);
         $this->assertSame($expectedResult, $serverNode->needToUpdate($currentTime));
     }

@@ -82,7 +82,7 @@ class ApplicationServerFacade
     }
 
     /**
-     * Checks if object is an instance of \OxidEsales\Eshop\Core\ApplicationServer.
+     * Checks if object is an instance of \OxidEsales\Eshop\Core\DataObject\ApplicationServer.
      *
      * @param object $server Object to check
      *
@@ -90,6 +90,6 @@ class ApplicationServerFacade
      */
     private function validateServerListItem($server)
     {
-        return ($server instanceof \OxidEsales\Eshop\Core\ApplicationServer);
+        return ($server instanceof \OxidEsales\Eshop\Core\DataObject\ApplicationServer);
     }
 }

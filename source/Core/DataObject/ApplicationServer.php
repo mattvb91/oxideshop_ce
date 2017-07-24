@@ -20,7 +20,7 @@
  * @version   OXID eShop CE
  */
 
-namespace OxidEsales\EshopCommunity\Core;
+namespace OxidEsales\EshopCommunity\Core\DataObject;
 
 /**
  * Class used as entity for server node information.
