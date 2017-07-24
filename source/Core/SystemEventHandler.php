@@ -163,8 +163,8 @@ class SystemEventHandler
     protected function validateOnline()
     {
         try {
-            $oProcessor = $this->_getServerProcessor();
-            $oProcessor->process();
+            $appServerService = $this->getAppServerService();
+            $appServerService->updateAppServerInformation($this->_getConfig()->isAdmin());
 
             if ($this->_isSendingShopDataEnabled() && !\OxidEsales\Eshop\Core\Registry::getUtils()->isSearchEngine()) {
                 $this->_sendShopInformation();
@@ -284,30 +284,26 @@ class SystemEventHandler
     }
 
     /**
-     * Gets server processor.
+     * Gets application server service.
      *
-     * @return \OxidEsales\Eshop\Core\ServerProcessor
+     * @return \OxidEsales\Eshop\Core\Contract\ApplicationServerServiceInterface
      */
-    protected function _getServerProcessor()
+    protected function getAppServerService()
     {
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
         $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
         $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
 
-        /** @var \OxidEsales\Eshop\Core\Service\ApplicationServerService $oApplicationServerService */
-        $oApplicationServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
+        /** @var \OxidEsales\Eshop\Core\UtilsServer $utilsServer */
+        $utilsServer = oxNew(\OxidEsales\Eshop\Core\UtilsServer::class);
+
+        $appServerService = oxNew(
+            \OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
             $appServerDao,
+            $utilsServer,
             \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()
         );
 
-        /** @var \OxidEsales\Eshop\Core\UtilsServer $oUtilsServer */
-        $oUtilsServer = oxNew(\OxidEsales\Eshop\Core\UtilsServer::class);
-
-        /** @var \OxidEsales\Eshop\Core\UtilsDate $oUtilsDate */
-        $oUtilsDate = \OxidEsales\Eshop\Core\Registry::getUtilsDate();
-
-        /** @var \OxidEsales\Eshop\Core\ServerProcessor $oProcessor */
-
-        return oxNew('oxServerProcessor', $oApplicationServerService, $oUtilsServer, $oUtilsDate);
+        return $appServerService;
     }
 }

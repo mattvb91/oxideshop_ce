@@ -43,14 +43,21 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
     private $currentTime = 0;
 
     /**
+     * @var \OxidEsales\Eshop\Core\UtilsServer
+     */
+    private $utilsServer;
+
+    /**
      * ApplicationServerService constructor.
      *
      * @param \OxidEsales\Eshop\Core\Dao\ApplicationServerDao $appServerDao The Dao object of application server.
+     * @param \OxidEsales\Eshop\Core\UtilsServer              $utilsServer
      * @param int                                             $currentTime  The current time - timestamp.
      */
-    public function __construct($appServerDao, $currentTime)
+    public function __construct($appServerDao, $utilsServer, $currentTime)
     {
         $this->appServerDao = $appServerDao;
+        $this->utilsServer = $utilsServer;
         $this->currentTime = $currentTime;
     }
 
@@ -149,4 +156,35 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
         }
     }
 
+    /**
+     * Renews application server information if it is outdated or if it does not exist.
+     *
+     * @param bool $adminMode The status of admin mode
+     */
+    public function updateAppServerInformation($adminMode = false)
+    {
+        $appServer = $this->loadAppServer($this->utilsServer->getServerNodeId());
+
+        if ($appServer->needToUpdate($this->currentTime)) {
+            $this->updateAppServerData($appServer, $adminMode);
+            $this->saveAppServer($appServer);
+        }
+    }
+
+    /**
+     * Updates application server with the newest information.
+     *
+     * @param \OxidEsales\Eshop\Core\ApplicationServer $appServer The application server to update.
+     * @param bool                                     $adminMode The status of admin mode
+     */
+    private function updateAppServerData($appServer, $adminMode)
+    {
+        $appServer->setIp($this->utilsServer->getServerIp());
+        $appServer->setTimestamp($this->currentTime);
+        if ($adminMode) {
+            $appServer->setLastAdminUsage($this->currentTime);
+        } else {
+            $appServer->setLastFrontendUsage($this->currentTime);
+        }
+    }
 }

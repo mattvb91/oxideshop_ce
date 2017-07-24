@@ -2651,11 +2651,6 @@ return [
         'isAbstract'       => false,
         'isInterface'      => false
     ],
-    'OxidEsales\Eshop\Core\ServerProcessor'                                      => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\ServerProcessor::class,
-        'isAbstract'       => false,
-        'isInterface'      => false
-    ],
     'OxidEsales\Eshop\Core\ServersManager'                                       => [
         'editionClassName' => \OxidEsales\EshopCommunity\Core\ServersManager::class,
         'isAbstract'       => false,

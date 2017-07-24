@@ -52,7 +52,9 @@ class ServersManager
         $config = \OxidEsales\Eshop\Core\Registry::getConfig();
         $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
         $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
-        $this->appServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime());
+        /** @var \OxidEsales\Eshop\Core\UtilsServer $utilsServer */
+        $utilsServer = oxNew(\OxidEsales\Eshop\Core\UtilsServer::class);
+        $this->appServerService = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class, $appServerDao, $utilsServer, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime());
     }
 
     /**

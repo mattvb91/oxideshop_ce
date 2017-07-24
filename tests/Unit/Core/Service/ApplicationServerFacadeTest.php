@@ -93,9 +93,11 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
         $config = Registry::getConfig();
         $databaseProvider = oxNew(DatabaseProvider::class);
         $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
+        /** @var \OxidEsales\Eshop\Core\UtilsServer $utilsServer */
+        $utilsServer = oxNew(\OxidEsales\Eshop\Core\UtilsServer::class);
         $service = $this->getMock(\OxidEsales\Eshop\Core\Service\ApplicationServerService::class,
             array("loadActiveAppServerList"),
-            array($appServerDao, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()));
+            array($appServerDao, $utilsServer, \OxidEsales\Eshop\Core\Registry::get("oxUtilsDate")->getTime()));
         $service->expects($this->any())->method('loadActiveAppServerList')->will($this->returnValue($appServerList));
 
         return $service;

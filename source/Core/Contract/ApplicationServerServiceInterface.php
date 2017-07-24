@@ -61,4 +61,11 @@ interface ApplicationServerServiceInterface
      * @return int
      */
     public function saveAppServer($appServer);
+
+    /**
+     * Renews application server information if it is outdated or if it does not exist.
+     *
+     * @param bool $adminMode The status of admin mode
+     */
+    public function updateAppServerInformation($adminMode = false);
 }
