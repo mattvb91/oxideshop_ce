@@ -25,24 +25,24 @@ use \OxidEsales\Eshop\Core\Registry;
 use \OxidEsales\Eshop\Core\DatabaseProvider;
 
 /**
- * @covers \OxidEsales\Eshop\Core\Service\ApplicationServerFacade
+ * @covers \OxidEsales\Eshop\Core\Service\ApplicationServerExporter
  */
-class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCase
+class ApplicationServerExporterTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
      * @param array $activeServers            An array of application servers.
      * @param int   $count                    Expected count of application servers.
      * @param array $expectedServerCollection Expected output.
      *
-     * @dataProvider dataProviderForGetApplicationServerList
+     * @dataProvider dataProviderForExportApplicationServerList
      */
-    public function testGetApplicationServerList($activeServers, $count, $expectedServerCollection)
+    public function testExport($activeServers, $count, $expectedServerCollection)
     {
 
         $service = $this->getApplicationServerServiceMock($activeServers);
-        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $service);
+        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerExporter::class, $service);
 
-        $appServers = $facade->getApplicationServerList();
+        $appServers = $facade->export();
 
         $this->assertCount($count, $appServers);
 
@@ -51,9 +51,9 @@ class ApplicationServerFacadeTest extends \OxidEsales\TestingLibrary\UnitTestCas
     }
 
     /**
-     * Data provider for the test method testGetApplicationServerList.
+     * Data provider for the test method testExport.
      */
-    public function dataProviderForGetApplicationServerList()
+    public function dataProviderForExportApplicationServerList()
     {
         $server = oxNew(\OxidEsales\Eshop\Core\DataObject\ApplicationServer::class);
         $server->setId('serverNameHash1');

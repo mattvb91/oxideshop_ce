@@ -1951,8 +1951,8 @@ return [
         'isAbstract'       => false,
         'isInterface'      => true
     ],
-    'OxidEsales\Eshop\Core\Service\ApplicationServerFacade'                                    => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\Service\ApplicationServerFacade::class,
+    'OxidEsales\Eshop\Core\Service\ApplicationServerExporter'                                    => [
+        'editionClassName' => \OxidEsales\EshopCommunity\Core\Service\ApplicationServerExporter::class,
         'isAbstract'       => false,
         'isInterface'      => false
     ],

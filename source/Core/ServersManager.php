@@ -40,7 +40,7 @@ class ServersManager
     private $appServerService;
 
     /**
-     * @var \OxidEsales\Eshop\Core\Service\ApplicationServerFacade
+     * @var \OxidEsales\Eshop\Core\Service\ApplicationServerExporter
      */
     private $appServerFacade;
 
@@ -86,8 +86,8 @@ class ServersManager
      */
     public function getServers()
     {
-        $appServerFacade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerFacade::class, $this->appServerService);
-        return $appServerFacade->getApplicationServerList();
+        $appServerFacade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerExporter::class, $this->appServerService);
+        return $appServerFacade->export();
     }
 
     /**

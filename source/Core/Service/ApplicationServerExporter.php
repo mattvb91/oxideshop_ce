@@ -28,7 +28,7 @@ namespace OxidEsales\EshopCommunity\Core\Service;
  * @internal Do not make a module extension for this class.
  * @see      http://oxidforge.org/en/core-oxid-eshop-classes-must-not-be-extended.html
  */
-class ApplicationServerFacade
+class ApplicationServerExporter
 {
     /**
      * @var \OxidEsales\Eshop\Core\Service\ApplicationServerService
@@ -36,7 +36,7 @@ class ApplicationServerFacade
     private $appServerService;
 
     /**
-     * ApplicationServerFacade constructor.
+     * ApplicationServerExporter constructor.
      *
      * @param \OxidEsales\Eshop\Core\Service\ApplicationServerService $appServerService The service class of application server.
      */
@@ -50,7 +50,7 @@ class ApplicationServerFacade
      *
      * @return array
      */
-    public function getApplicationServerList()
+    public function export()
     {
         $this->appServerService->cleanupAppServers();
 
