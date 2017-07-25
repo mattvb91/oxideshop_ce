@@ -21,38 +21,39 @@
  */
 namespace OxidEsales\EshopCommunity\Tests\Integration\Http;
 
-
-class HtaccessTest extends \OxidTestCase
+/**
+ * Testing that the .htaccess rules are as expected.
+ *
+ * @package OxidEsales\EshopCommunity\Tests\Integration\Http
+ */
+class HtAccessTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
-    public function testHtaccessRewrite301ForRedirectedFileExtensions()
+    /**
+     * Assure, that we get an HTTP code 301 for redirected file extensions.
+     */
+    public function testHtAccessRewrite301ForRedirectedFileExtensions()
     {
-        $shopUrl = $this->getConfig()->getShopUrl(1);
-        $command = 'curl -I -s ' . $shopUrl . '/file.someExtension' ;
-        $response = shell_exec($command);
+        $response = $this->callCurl('/file.someExtension');
 
-        $this->assertNotNull($response, 'This command failed to execute: ' . $command);
-        $this->assertContains('301 Moved Permanently', $response, 'All files with a not defined extension are redirected with code "301 Moved Permanently" ' . $command);
-
+        $this->assertHttpCode301($response, 'All files with a not defined extension are redirected with code "301 Moved Permanently"');
     }
 
     /**
-     * @dataProvider dataProviderTestHtaccessRewriteForFileExtensions
+     * Assure, that we get no HTTP code 301 for not redirected file extensions.
      *
-     * @param $fileExtension
-     * @param $message
+     * @dataProvider dataProviderTestHtAccessRewriteForFileExtensions
+     *
+     * @param string $fileExtension The extension of the file we want to check right now.
+     * @param string $message       The message we want to show, if the cURL response is a 301.
      */
-    public function testHtaccessRewrite301ForNotRedirectedFileExtensions($fileExtension, $message)
+    public function testHtAccessRewrite301ForNotRedirectedFileExtensions($fileExtension, $message)
     {
-        $shopUrl = $this->getConfig()->getShopUrl(1);
-        $command = 'curl -I -s ' . $shopUrl . '/file.' . $fileExtension;
-        $response = shell_exec($command);
+        $response = $this->callCurl('/file.' . $fileExtension);
 
-        $this->assertNotNull($response, 'This command failed to execute: ' . $command);
-        $this->assertNotContains('301 Moved Permanently', $response, $message);
-
+        $this->assertNoHttpCode301($message, $response);
     }
 
-    public function dataProviderTestHtaccessRewriteForFileExtensions()
+    public function dataProviderTestHtAccessRewriteForFileExtensions()
     {
         return [
             ['html', 'html files are not redirected with 301'],
@@ -78,5 +79,45 @@ class HtaccessTest extends \OxidTestCase
             ['HTC', 'HTC FILES ARE NOT REDIRECTED WITH 301'],
             ['SVG', 'SVG FILES ARE NOT REDIRECTED WITH 301'],
         ];
+    }
+
+    /**
+     * Call an OXID eShop file URL over the shell cURL command. Assure, that the cURL command didn't failed.
+     *
+     * @param string $fileUrlPart The URL part pointing to the file we want to get over cURL.
+     *
+     * @return string The response of the cURL call.
+     */
+    protected function callCurl($fileUrlPart)
+    {
+        $url = $this->getConfig()->getShopUrl(1) . $fileUrlPart;
+        $command = 'curl -I -s ' . $url;
+        $response = shell_exec($command);
+
+        $this->assertNotNull($response, 'This command failed to execute: ' . $command);
+
+        return $response;
+    }
+
+    /**
+     * Assure, that the given cURL response is a HTTP code 301.
+     *
+     * @param string $response The response of the cURL call.
+     * @param string $message  The message we show, if the given response is not a HTTP code 301.
+     */
+    protected function assertHttpCode301($response, $message)
+    {
+        $this->assertContains('301 Moved Permanently', $response, $message);
+    }
+
+    /**
+     * Assure, that the given cURL response isn't a HTTP code 301.
+     *
+     * @param string $response The response of the cURL call.
+     * @param string $message  The message we show, if the given response is a HTTP code 301.
+     */
+    protected function assertNoHttpCode301($response, $message)
+    {
+        $this->assertNotContains('301 Moved Permanently', $response, $message);
     }
 }
