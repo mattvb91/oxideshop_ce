@@ -1956,8 +1956,8 @@ return [
         'isAbstract'       => false,
         'isInterface'      => false
     ],
-    'OxidEsales\Eshop\Core\Contract\ApplicationServerExporterInterface'                                    => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\Contract\ApplicationServerExporterInterface::class,
+    'OxidEsales\Eshop\Core\Service\ApplicationServerExporterInterface'                                    => [
+        'editionClassName' => \OxidEsales\EshopCommunity\Core\Service\ApplicationServerExporterInterface::class,
         'isAbstract'       => false,
         'isInterface'      => true
     ],
@@ -1966,8 +1966,8 @@ return [
         'isAbstract'       => false,
         'isInterface'      => false
     ],
-    'OxidEsales\Eshop\Core\Contract\ApplicationServerServiceInterface'                                    => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\Contract\ApplicationServerServiceInterface::class,
+    'OxidEsales\Eshop\Core\Service\ApplicationServerServiceInterface'                                    => [
+        'editionClassName' => \OxidEsales\EshopCommunity\Core\Service\ApplicationServerServiceInterface::class,
         'isAbstract'       => false,
         'isInterface'      => true
     ],

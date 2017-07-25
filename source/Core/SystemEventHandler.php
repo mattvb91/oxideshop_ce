@@ -93,7 +93,7 @@ class SystemEventHandler
     /**
      * ApplicationServerExporter dependency setter
      *
-     * @return \OxidEsales\Eshop\Core\Contract\ApplicationServerExporterInterface
+     * @return \OxidEsales\Eshop\Core\Service\ApplicationServerExporterInterface
      */
     public function getApplicationServerExporter()
     {
@@ -297,7 +297,7 @@ class SystemEventHandler
     /**
      * Gets application server service.
      *
-     * @return \OxidEsales\Eshop\Core\Contract\ApplicationServerServiceInterface
+     * @return \OxidEsales\Eshop\Core\Service\ApplicationServerServiceInterface
      */
     protected function getAppServerService()
     {

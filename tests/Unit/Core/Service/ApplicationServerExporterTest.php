@@ -40,9 +40,9 @@ class ApplicationServerExporterTest extends \OxidEsales\TestingLibrary\UnitTestC
     {
 
         $service = $this->getApplicationServerServiceMock($activeServers);
-        $facade = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerExporter::class, $service);
+        $exporter = oxNew(\OxidEsales\Eshop\Core\Service\ApplicationServerExporter::class, $service);
 
-        $appServers = $facade->exportAppServerList();
+        $appServers = $exporter->exportAppServerList();
 
         $this->assertCount($count, $appServers);
 
@@ -90,7 +90,7 @@ class ApplicationServerExporterTest extends \OxidEsales\TestingLibrary\UnitTestC
      */
     private function getApplicationServerServiceMock($appServerList)
     {
-        $appServer = $this->getMockBuilder('\OxidEsales\Eshop\Core\Contract\ApplicationServerServiceInterface')->getMock();
+        $appServer = $this->getMockBuilder('\OxidEsales\Eshop\Core\Service\ApplicationServerServiceInterface')->getMock();
         $appServer->expects($this->any())->method('loadActiveAppServerList')->will($this->returnValue($appServerList));
 
         return $appServer;

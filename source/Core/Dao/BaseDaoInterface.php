@@ -51,7 +51,7 @@ interface BaseDaoInterface
      *
      * @param string $id An id of the entity to find.
      *
-     * @return object
+     * @return mixed
      */
     public function findById($id);
 

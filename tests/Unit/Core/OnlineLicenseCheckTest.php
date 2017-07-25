@@ -288,7 +288,7 @@ class OnlineLicenseCheckTest extends \OxidTestCase
      */
     private function getApplicationServerExporterMock($appServerList)
     {
-        $appServer = $this->getMockBuilder('\OxidEsales\Eshop\Core\Contract\ApplicationServerServiceInterface')->getMock();
+        $appServer = $this->getMockBuilder('\OxidEsales\Eshop\Core\Service\ApplicationServerServiceInterface')->getMock();
 
         $exporter = $this->getMockBuilder('\OxidEsales\Eshop\Core\Service\ApplicationServerExporter')
             ->setConstructorArgs([$appServer])
