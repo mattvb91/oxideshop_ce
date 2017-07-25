@@ -1946,8 +1946,8 @@ return [
         'isAbstract'       => false,
         'isInterface'      => false
     ],
-    'OxidEsales\Eshop\Core\Contract\BaseDaoInterface'                                    => [
-        'editionClassName' => \OxidEsales\EshopCommunity\Core\Contract\BaseDaoInterface::class,
+    'OxidEsales\Eshop\Core\Dao\BaseDaoInterface'                                    => [
+        'editionClassName' => \OxidEsales\EshopCommunity\Core\Dao\BaseDaoInterface::class,
         'isAbstract'       => false,
         'isInterface'      => true
     ],

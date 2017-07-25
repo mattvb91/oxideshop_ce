@@ -54,7 +54,7 @@ class ApplicationServerService implements \OxidEsales\Eshop\Core\Contract\Applic
      * @param \OxidEsales\Eshop\Core\UtilsServer              $utilsServer
      * @param int                                             $currentTime  The current time - timestamp.
      */
-    public function __construct($appServerDao, $utilsServer, $currentTime)
+    public function __construct(\OxidEsales\Eshop\Core\Dao\BaseDaoInterface $appServerDao, $utilsServer, $currentTime)
     {
         $this->appServerDao = $appServerDao;
         $this->utilsServer = $utilsServer;
