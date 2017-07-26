@@ -29,13 +29,36 @@ namespace OxidEsales\EshopCommunity\Tests\Integration\Http;
 class HtAccessTest extends \OxidEsales\TestingLibrary\UnitTestCase
 {
     /**
-     * Assure, that we get an HTTP code 301 for redirected file extensions.
+     * Assure, that we get a HTTP code 301 for redirected file extensions.
      */
     public function testHtAccessRewrite301ForRedirectedFileExtensions()
     {
         $response = $this->callCurl('/file.someExtension');
 
         $this->assertHttpCode301($response, 'All files with a not defined extension are redirected with code "301 Moved Permanently"');
+    }
+
+    /**
+     * Assure, that we get a HTTP code 301 for the migration folder and the migration in it.
+     *
+     * @dataProvider dataProviderTestHtAccessRewrite301ForMigrations
+     *
+     * @param string $urlPart The URL part to the file or directory we want to check now.
+     */
+    public function testHtAccessRewrite301ForMigrations($urlPart)
+    {
+        $response = $this->callCurl($urlPart);
+
+        $this->assertHttpCode301($response, 'All files and directories, which should not be publicly available are redirected with code "301 Moved Permanently"');
+    }
+
+    public function dataProviderTestHtAccessRewrite301ForMigrations()
+    {
+        return [
+            ['urlPart' => '/migration'],
+            ['urlPart' => '/migration/data'],
+            ['urlPart' => '/migration/data/Version20170718124421.php']
+        ];
     }
 
     /**
