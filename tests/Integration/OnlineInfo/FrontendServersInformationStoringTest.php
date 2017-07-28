@@ -34,6 +34,12 @@ class FrontendServersInformationStoringTest extends \OxidEsales\TestingLibrary\U
      */
     private $serverId = '7da43ed884a1zd1d6035d4c1d630fc4e';
 
+    public function setUp()
+    {
+        parent::setUp();
+        \OxidEsales\Eshop\Core\DatabaseProvider::getDb()->execute("DELETE FROM oxconfig WHERE oxvarname like 'aServersData_%'");
+    }
+
     /**
      * @return array
      */
@@ -47,16 +53,14 @@ class FrontendServersInformationStoringTest extends \OxidEsales\TestingLibrary\U
             'timestamp'         => $currentTime,
             'ip'                => $serverIp,
             'lastFrontendUsage' => $currentTime,
-            'lastAdminUsage'    => '',
-            'isValid'           => null,
+            'lastAdminUsage'    => ''
         );
         $expectedAdminServersData = array(
             'id'                => $serverId,
             'timestamp'         => $currentTime,
             'ip'                => $serverIp,
             'lastFrontendUsage' => '',
-            'lastAdminUsage'    => $currentTime,
-            'isValid'           => null,
+            'lastAdminUsage'    => $currentTime
         );
 
         return array(
@@ -79,7 +83,6 @@ class FrontendServersInformationStoringTest extends \OxidEsales\TestingLibrary\U
         $utilsServer = $this->createServerMock($serverId, $serverIp);
 
         $config = $this->getConfig();
-        $config->saveSystemConfigParameter('arr', 'aServersData_'.$serverId, null);
 
         $databaseProvider = oxNew(\OxidEsales\Eshop\Core\DatabaseProvider::class);
         $appServerDao = oxNew(\OxidEsales\Eshop\Core\Dao\ApplicationServerDao::class, $databaseProvider, $config);
