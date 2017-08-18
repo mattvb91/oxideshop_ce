@@ -23,6 +23,7 @@
 namespace OxidEsales\EshopCommunity\Application\Model;
 
 use oxDb;
+use OxidEsales\EshopCommunity\Core\DatabaseProvider;
 
 /**
  * Discount list manager.
@@ -256,6 +257,18 @@ class DiscountList extends \OxidEsales\Eshop\Core\Model\ListModel
     {
         $aList = [];
         $aDiscList = $this->_getList($oUser)->getArray();
+
+        $aDiscountKeys = array_keys($aDiscList);
+        $sQuery = 'select OXDISCOUNTID from oxobject2discount where oxdiscountid in("' . implode('","', $aDiscountKeys) . '")';
+        $sQuery .= Discount::getProductCheckQuery($oArticle);
+
+        $aProductDiscounts = [];
+        foreach(DatabaseProvider::getDb(oxDb::FETCH_MODE_NUM)->getAll($sQuery) as $key => $row) {
+            $aProductDiscounts[$row[0]] = true;
+        }
+
+        $aDiscList = array_intersect_key($aDiscList, $aProductDiscounts);
+
         /** @var \OxidEsales\Eshop\Application\Model\Discount $oDiscount */
         foreach ($aDiscList as $oDiscount) {
             if ($oDiscount->isForBundleItem($oArticle, $oBasket) && $oDiscount->isForBasketAmount($oBasket)) {

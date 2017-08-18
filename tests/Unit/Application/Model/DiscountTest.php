@@ -21,6 +21,7 @@
  */
 namespace OxidEsales\EshopCommunity\Tests\Unit\Application\Model;
 
+use OxidEsales\EshopCommunity\Application\Model\Discount;
 use \oxprice;
 use \oxbasket;
 use \oxArticle;
@@ -1018,8 +1019,8 @@ class DiscountTest extends \OxidTestCase
         $sQ2 = " and oxobjectid = 'ProductId'";
 
         $oDiscount = oxNew('oxDiscount');
-        $this->assertEquals($sQ1, $oDiscount->UNITgetProductCheckQuery($oProduct1));
-        $this->assertEquals($sQ2, $oDiscount->UNITgetProductCheckQuery($oProduct2));
+        $this->assertEquals($sQ1, Discount::getProductCheckQuery($oProduct1));
+        $this->assertEquals($sQ2, Discount::getProductCheckQuery($oProduct2));
     }
 
     /**

@@ -223,7 +223,7 @@ class Discount extends \OxidEsales\Eshop\Core\Model\MultiLanguageModel
 
         // check if this article is assigned
         $sQ = "select 1 from oxobject2discount where oxdiscountid = " . $oDb->quote($this->oxdiscount__oxid->value) . " and oxtype = 'oxarticles' ";
-        $sQ .= $this->_getProductCheckQuery($oArticle);
+        $sQ .= self::getProductCheckQuery($oArticle);
         if (!($blOk = ( bool ) $oDb->getOne($sQ))) {
             // checking article category
             $blOk = $this->_checkForArticleCategories($oArticle);
@@ -340,7 +340,7 @@ class Discount extends \OxidEsales\Eshop\Core\Model\MultiLanguageModel
 
         $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         $sQ = "select 1 from oxobject2discount where oxdiscountid=" . $oDb->quote($this->getId());
-        $sQ .= $this->_getProductCheckQuery($oArticle);
+        $sQ .= self::getProductCheckQuery($oArticle);
         if (!($blOk = (bool) $oDb->getOne($sQ))) {
             // additional checks for amounts and other dependencies
             $blOk = $this->_checkForArticleCategories($oArticle);
@@ -529,7 +529,7 @@ class Discount extends \OxidEsales\Eshop\Core\Model\MultiLanguageModel
      *
      * @return string
      */
-    protected function _getProductCheckQuery($oProduct)
+    public static function getProductCheckQuery($oProduct)
     {
         $oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
         // check if this article is assigned
@@ -557,7 +557,7 @@ class Discount extends \OxidEsales\Eshop\Core\Model\MultiLanguageModel
         $sQ = "select 1
                 from oxobject2discount
                 where oxdiscountid = {$sDiscountIdQuoted} and oxtype = 'oxarticles' ";
-        $sQ .= $this->_getProductCheckQuery($oArticle);
+        $sQ .= self::getProductCheckQuery($oArticle);
 
         return $oDb->getOne($sQ) ? true : false;
     }
